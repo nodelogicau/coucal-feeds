@@ -16,11 +16,12 @@
 
 package au.nodelogic.coucal.feeds.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Feed {
@@ -37,6 +38,12 @@ public class Feed {
     private URL link;
 
     private URL icon;
+
+    private Date publishedDate;
+
+    @OneToMany
+    @JoinColumn(name = "feed_uri")
+    private List<FeedItem> items = new ArrayList<>();
 
     @OneToOne
     private FeedCredentials credentials;
@@ -87,6 +94,18 @@ public class Feed {
 
     public void setIcon(URL icon) {
         this.icon = icon;
+    }
+
+    public Date getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(Date publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public List<FeedItem> getItems() {
+        return items;
     }
 
     public FeedCredentials getCredentials() {

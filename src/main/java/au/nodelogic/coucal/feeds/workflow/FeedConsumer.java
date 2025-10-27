@@ -37,6 +37,7 @@ public class FeedConsumer implements Consumer<SyndFeed> {
         }
         feed.setTitle(syndFeed.getTitle());
         feed.setDescription(syndFeed.getDescription());
+        feed.setPublishedDate(syndFeed.getPublishedDate());
         try {
             feed.setLink(URI.create(syndFeed.getLink()).toURL());
         } catch (MalformedURLException e) {

@@ -64,7 +64,7 @@ public class FeedController {
         List<FeedItem> feedItems = feedItemRepository.findAllByOrderByPublishedDate();
         Collections.reverse(feedItems);
         model.addAttribute("feedItems", feedItems);
-        return "feeds/index";
+        return "feeds/list";
     }
 
     @PostMapping("/")
