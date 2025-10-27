@@ -1,0 +1,234 @@
+<!--
+     Copyright 2025 Node Logic
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<table class="border-2 border-gray-200">
+    <thead>
+    <tr>
+        <th class="bg-gray-200">Table</th>
+        <th class="bg-gray-200">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <table th:fragment="inbox"
+                   class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <tbody>
+                <tr th:each="message : ${inbox}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="w-4 px-2 py-1">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-table-1" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <td class="px-3 py-2">
+                        <th:block th:text="${message.sender.personal}"></th:block>
+                    </td>
+                    <th scope="row" class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th:block th:text="${#strings.abbreviate(message.subject, 64)}"></th:block>
+                    </th>
+                    <td th:text="${dateFormatter.format(message.receivedDate)}" class="px-6 py-4">
+                        Today
+                    </td>
+                    <td class="px-3 py-2 text-right" nowrap>
+                        <button
+                                data-modal-target="delete-modal" data-modal-toggle="delete-modal"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Add</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <th class="bg-gray-200">Inbox</th>
+    </tr>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <table th:fragment="feed-items"
+                   id="items" class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <tbody>
+                <tr>
+                    <th nowrap colspan="2" class="w-4 px-2 py-1">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-0" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-table-0" class="sr-only">checkbox</label>
+                            <span class="px-4" th:text="|${feedItems.size} Items|">1001 Items</span>
+                        </div>
+                    </th>
+<!--                    <th nowrap colspan="2" th:text="|${feedItems.size} Items|">1001 Items</th>-->
+                </tr>
+                <tr class="bg-white dark:bg-gray-800" th:each="feedItem, iStat : ${feedItems}" draggable="true">
+                    <td class="w-4 px-2 py-1">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-table-1" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <th scope="row" class="px-2 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <img src="#" th:src="${feedItem.feed.icon}" class="inline size-8">
+                        <span th:text="${#strings.abbreviate(feedItem.feed.title, 14)}">Feed Name</span>
+                    </th>
+                    <td class="px-2 py-1">
+                        <a th:href="${feedItem.link}" target="_blank" th:text="${feedItem.title}" th:id="|feed-item${iStat.index}|"
+                           th:data-popover-target="|popover-feed-item${iStat.index}|" data-popover-placement="right"></a>
+                    </td>
+                    <td class="px-2 py-1">
+                        <span th:text="${dateFormatter.format(feedItem.publishedDate)}" class="px-2 py-1 text-nowrap">
+                            Published Date
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <th class="bg-gray-200">Feed Items</th>
+    </tr>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <table th:fragment="collections"
+                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Description
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Timezone
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="collection : ${collections}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <a href="#" th:href="|/view/collection/${collection.displayName}|">
+                            <span th:text="${collection.displayName}">Collection 1</span>
+                        </a>
+                    </th>
+                    <td class="px-6 py-4">
+                        -
+                    </td>
+                    <td class="px-6 py-4">
+                        Australia/Melbourne
+                    </td>
+                    <td class="px-6 py-4 text-right" nowrap>
+                        <a th:href="|/edit/collection/${collection.displayName}|"
+                           href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a> |
+                        <button
+                                data-modal-target="delete-modal" data-modal-toggle="delete-modal"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Archive</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <th class="bg-gray-200">Collections</th>
+    </tr>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <table th:fragment="collection-entries"
+                    class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <tbody>
+                <!--                <tr th:each="node : ${content}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">-->
+                <tr th:each="node : ${content}">
+                    <!--                    <th scope="row" class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">-->
+                    <td class="w-4 px-2 py-1">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-table-1" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <td>
+                        [ORGANIZER]
+                    </td>
+                    <th scope="row">
+                        <a href="#" th:href="|/view/${node.components[0].propertyList.getRequired('CONCEPT').value}/${node.uid.value}|">
+                            <span th:replace="~{fragments/entries :: renderContent(${node})}">Node 1</span>
+                        </a>
+                    </th>
+                    <td>
+                        <span th:replace="~{/fragments/ui/badge::default('Lifestyle')}"></span>
+                    </td>
+                    <td th:text="${dateFormatter.format(node.components[0].propertyList.getRequired('DTSTAMP').date)}">
+                        Today
+                    </td>
+                    <!--                    <td class="text-right" nowrap>-->
+                    <!--                        <a th:href="|/edit/${node.components[0].propertyList.getRequired('CONCEPT').value}/${node.uid.value}|"-->
+                    <!--                           href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a> |-->
+                    <!--                        <button-->
+                    <!--                                data-modal-target="delete-modal" data-modal-toggle="delete-modal"-->
+                    <!--                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>-->
+                    <!--                    </td>-->
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <th class="bg-gray-200">Collection Entries</th>
+    </tr>
+    </tbody>
+</table>
+
+<div th:fragment="default(id, rows)">
+    <table th:id="|table-${id}|" class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead>
+        <tr>
+            <th th:each="column : ${columnHeadings}" scope="col" class="px-4 py-2">
+                <span class="flex items-center">
+                    <th:block th:text="${column}">[COLUMN]</th:block>
+                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                    </svg>
+                </span>
+            </th>
+            <th scope="col" class="px-4 py-2">
+                <span class="sr-only">Edit</span>
+            </th>
+        </tr>
+        </thead>
+        <tbody th:replace="${rows}">
+        <tr>
+            <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Flowbite</td>
+            <td>2021/25/09</td>
+            <td>269000</td>
+            <td>49%</td>
+        </tr>
+        </tbody>
+    </table>
+    <script th:inline="javascript">
+        if (document.getElementById([[|table-${id}|]]) && typeof simpleDatatables.DataTable !== 'undefined') {
+            const dataTable = new simpleDatatables.DataTable([[|#table-${id}|]], {
+                searchable: false,
+                paging: true,
+                perPage: 10,
+                // perPageSelect: [10, 50, 100]
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

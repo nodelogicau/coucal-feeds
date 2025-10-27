@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<h1 class="text-2xl p-2">Inbox</h1>
+
+<table class="border-2 border-gray-200">
+    <thead>
+    <tr>
+        <th class="bg-gray-200">Form</th>
+        <th class="bg-gray-200">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+</table>
+
+<h1 class="text-2xl p-2">Feeds</h1>
+
+<table class="border-2 border-gray-200">
+    <thead>
+    <tr>
+        <th class="bg-gray-200">Form</th>
+        <th class="bg-gray-200">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <form th:fragment="feed-add"
+                  id="add-feed" hx-post="/feeds/">
+                <label>
+                    <input type="url" name="feedUrl" placeholder="Web Address"
+                        class="block w-full p-2 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </label>
+            </form>
+        </td>
+        <th class="bg-gray-200">Add Feed</th>
+    </tr>
+    </tbody>
+</table>
+
+<h1 class="text-2xl p-2">Collections</h1>
+
+<table class="border-2 border-gray-200">
+    <thead>
+    <tr>
+        <th class="bg-gray-200">Form</th>
+        <th class="bg-gray-200">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <form th:fragment="collection-add(target)"
+                  hx-post="/collections/" th:hx-target="${target}" hx-swap="outerHTML"
+                  hx-on::after-request="if(event.detail.successful) this.reset()">
+                <label>
+                    <div class="relative pl-2 pr-2">
+                        <input name="displayName" pattern="(?i)^(?!inbox|entities)[\w_ ]*$"
+                               class="block w-full p-2 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="New collection" required>
+                        <button type="submit" class="opacity-30 hover:opacity-100 transition-opacity duration-300 text-white absolute end-3.5 bottom-1.5 bg-indigo-600 hover:bg-indigo-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+                    </div>
+                </label>
+                <!--    <button type="submit"  th:replace="~{fragments/ui/button::submit('Add')}">Add</button>-->
+            </form>
+        </td>
+        <th class="bg-gray-200">Add Collection</th>
+    </tr>
+    <tr>
+        <td class="border-2 border-gray-200 p-4">
+            <form th:fragment="create-meeting(collection)" id="meeting-create" class="max-w-md mx-auto"
+                  th:hx-post="|/entries/${collection}/|" hx-target="#entries-root"
+                  hx-on::after-request="if(event.detail.successful) this.reset()">
+
+                <label>
+                    <input name="summary" placeholder="Meeting Objective">
+                </label>
+                <label>
+                    Description
+                    <textarea name="description" rows="4"
+                              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              placeholder="Description"></textarea>
+                </label>
+                <label>Participants</label>
+                <label>Attachments</label>
+                <label>Notifications</label>
+                <input type="submit" value="Add">
+                <input type="hidden" name="concept" value="semcal:concept:event">
+            </form>
+        </td>
+        <th class="bg-gray-200">Create Event</th>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

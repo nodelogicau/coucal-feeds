@@ -1,0 +1,268 @@
+<!--
+     Copyright 2025 Node Logic
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<div th:fragment="default">
+    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+        <li th:fragment="default-tab-active(context, label)" class="me-2">
+            <a href="#" aria-current="page"  hx-trigger="click" th:hx-get="|/ribbon/${context}?collection=${collection?.displayName}|" hx-target="#ribbon" hx-swap="outerHTML"
+               class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500">
+                <span th:text="${label}">Calendar</span>
+            </a>
+        </li>
+        <li th:fragment="default-tab(context, label)" class="me-2">
+            <a href="#" hx-trigger="click" th:hx-get="|/ribbon/${context}?collection=${collection?.displayName}|" hx-target="#ribbon" hx-swap="outerHTML"
+               class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                <span th:text="${label}">Planner</span>
+            </a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Journal</a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Tracker</a>
+        </li>
+    </ul>
+</div>
+
+<div th:fragment="ribbon">
+    <ul class="flex flex-wrap -mb-px">
+        <li th:fragment="ribbon-tab-bold(context, label)" class="me-2">
+            <a href="#" hx-trigger="click" th:hx-get="|/ribbon/${context}?collection=${collection?.displayName}|" hx-target="#ribbon" hx-swap="outerHTML"
+               class="font-bold flex items-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                <span th:text="${label}">Chat</span>
+            </a>
+        </li>
+        <li th:fragment="ribbon-tab(context, label)" class="me-2">
+            <a href="#" hx-trigger="click" th:hx-get="|/ribbon/${context}?collection=${collection?.displayName}|" hx-target="#ribbon" hx-swap="outerHTML"
+               class="flex items-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                <span th:text="${label}">Edit</span>
+            </a>
+        </li>
+        <li th:fragment="ribbon-tab-active(context, label)" hx-trigger="click" th:hx-get="|/ribbon/${context}?collection=${collection?.displayName}|" hx-target="#ribbon" hx-swap="outerHTML"
+            class="me-2">
+            <a href="#" class="flex items-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">
+                <span th:text="${label}">Filter</span>
+            </a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="flex items-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                <span>View</span>
+            </a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="flex items-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                <span>Options</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div th:fragment="event-create" class="p-4">
+    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400" id="event-tabs" data-tabs-toggle="#event-forms" role="tablist">
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="meeting-tab" data-tabs-target="#meeting" role="tab" aria-controls="meeting" aria-selected="false">Meeting</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="appointment-tab" data-tabs-target="#appointment" role="tab" aria-controls="appointment" aria-selected="false">Appointment</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="seminar-tab" data-tabs-target="#seminar" role="tab" aria-controls="seminar" aria-selected="false">Seminar</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="conference-tab" data-tabs-target="#conference" role="tab" aria-controls="conference" aria-selected="false">Conference</a>
+        </li>
+        <li role="presentation">
+            <a class="inline-block px-4 py-3 text-gray-400 cursor-not-allowed dark:text-gray-500"
+               id="performance-tab" data-tabs-target="#performance" role="tab" aria-controls="performance" aria-selected="false">Performance</a>
+        </li>
+    </ul>
+
+    <div id="event-forms">
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="meeting" role="tabpanel" aria-labelledby="meeting-tab">
+            <form th:replace="~{fragments/ui/form :: create-meeting(${collection})}">
+            </form>
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="appointment" role="tabpanel" aria-labelledby="appointment-tab">
+            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="seminar" role="tabpanel" aria-labelledby="seminar-tab">
+            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Settings tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="conference" role="tabpanel" aria-labelledby="conference-tab">
+            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="performance" role="tabpanel" aria-labelledby="performance-tab">
+            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="reminder-create" class="p-4">
+    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400" id="reminder-tabs" data-tabs-toggle="#reminder-forms" role="tablist">
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="birthday-tab" data-tabs-target="#birthday" role="tab" aria-controls="birthday" aria-selected="false">Birthday</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="anniversary-tab" data-tabs-target="#anniversary" role="tab" aria-controls="anniversary" aria-selected="false">Anniversary</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="subscription-tab" data-tabs-target="#subscription" role="tab" aria-controls="subscription" aria-selected="false">Subscription</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="observance-tab" data-tabs-target="#observance" role="tab" aria-controls="observance" aria-selected="false">Observance</a>
+        </li>
+    </ul>
+
+    <div id="reminder-forms">
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="birthday" role="tabpanel" aria-labelledby="birthday-tab">
+            Birthday
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="anniversary" role="tabpanel" aria-labelledby="anniversary-tab">
+            Anniversary
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="subscription" role="tabpanel" aria-labelledby="subscription-tab">
+            Subscription
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="observance" role="tabpanel" aria-labelledby="observance-tab">
+            Observance
+        </div>
+    </div>
+</div>
+
+<div th:fragment="action-create" class="p-4">
+    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400" id="action-tabs" data-tabs-toggle="#action-forms" role="tablist">
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="task-tab" data-tabs-target="#task" role="tab" aria-controls="task" aria-selected="false">Task</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="goal-tab" data-tabs-target="#goal" role="tab" aria-controls="goal" aria-selected="false">Goal</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="milestone-tab" data-tabs-target="#milestone" role="tab" aria-controls="milestone" aria-selected="false">Milestone</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="agenda-tab" data-tabs-target="#agenda" role="tab" aria-controls="agenda" aria-selected="false">Agenda</a>
+        </li>
+    </ul>
+
+    <div id="action-forms">
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="task" role="tabpanel" aria-labelledby="task-tab">
+            Task
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="goal" role="tabpanel" aria-labelledby="goal-tab">
+            Goal
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="milestone" role="tabpanel" aria-labelledby="milestone-tab">
+            Milestone
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="agenda" role="tabpanel" aria-labelledby="agenda-tab">
+            Agenda
+        </div>
+    </div>
+</div>
+
+<div th:fragment="issue-create" class="p-4">
+    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400" id="issue-tabs" data-tabs-toggle="#issue-forms" role="tablist">
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="issue-tab" data-tabs-target="#issue" role="tab" aria-controls="issue" aria-selected="false">Issue</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="risk-tab" data-tabs-target="#risk" role="tab" aria-controls="risk" aria-selected="false">Risk</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="incident-tab" data-tabs-target="#incident" role="tab" aria-controls="incident" aria-selected="false">Incident</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="improvement-tab" data-tabs-target="#improvement" role="tab" aria-controls="improvement" aria-selected="false">Improvement</a>
+        </li>
+    </ul>
+
+    <div id="issue-forms">
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="issue" role="tabpanel" aria-labelledby="issue-tab">
+            Issue
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="risk" role="tabpanel" aria-labelledby="risk-tab">
+            Risk
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="incident" role="tabpanel" aria-labelledby="incident-tab">
+            Incident
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="improvement" role="tabpanel" aria-labelledby="improvement-tab">
+            Improvement
+        </div>
+    </div>
+</div>
+
+<div th:fragment="note-create" class="p-4">
+    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400" id="note-tabs" data-tabs-toggle="#note-forms" role="tablist">
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="note-tab" data-tabs-target="#note" role="tab" aria-controls="note" aria-selected="false">Note</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="objective-tab" data-tabs-target="#objective" role="tab" aria-controls="objective" aria-selected="false">Objective</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="decision-tab" data-tabs-target="#decision" role="tab" aria-controls="decision" aria-selected="false">Decision</a>
+        </li>
+        <li class="me-2" role="presentation">
+            <a href="#" class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+               id="assumption-tab" data-tabs-target="#assumption" role="tab" aria-controls="assumption" aria-selected="false">Assumption</a>
+        </li>
+    </ul>
+
+    <div id="note-forms">
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="note" role="tabpanel" aria-labelledby="note-tab">
+            Note
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="decision" role="tabpanel" aria-labelledby="decision-tab">
+            Decision
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="objective" role="tabpanel" aria-labelledby="objective-tab">
+            Objective
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="assumption" role="tabpanel" aria-labelledby="assumption-tab">
+            Assumption
+        </div>
+    </div>
+</div>
+</body>
+</html>

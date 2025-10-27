@@ -1,0 +1,80 @@
+#
+#  Copyright 2025 Node Logic
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+spring:
+  application:
+    name: Coucal Feeds
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    banner-mode: "off"
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+#      hbm2ddl.auto: create-drop
+      ddl-auto: update
+      show_sql: true
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+#    url: jdbc:sqlite:coucal.db
+    username: sa
+    password: sa
+
+springdoc:
+  show-actuator: true
+  swagger-ui.path: /swagger-ui.html
+
+server:
+  error:
+    whitelabel:
+      enabled: true
+    include-stacktrace: always
+  address: localhost
+  port: ${PORT:8080}
+#  port: ${PORT:3443}
+#  ssl:
+#    key-store-type: PKCS12
+#    key-store: classpath:keystore/coucal.p12
+#    key-store-password: changeme
+#    key-alias: coucal
+#    enabled: true
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %highlight(%-5level) %yellow(%logger{40}.%M\\(%class{0}.java:%line\\)) - %msg%throwable%n"
+  level:
+    root: WARN
+  org:
+    springframework:
+      boot:
+        test:
+          context:
+            SpringBootTestContextBootstrapper: WARN
+      test:
+        context:
+          support:
+            AbstractContextLoader: OFF
+            AnnotationConfigContextLoaderUtils: OFF
+external:
+  server:
+    address: http://localhost:8080 # Do not include trailing slash
+
+keystore:
+  path: ".secrets"

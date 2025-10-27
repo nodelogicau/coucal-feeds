@@ -1,0 +1,97 @@
+<!--
+     Copyright 2025 Node Logic
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<div th:fragment="ribbon" th:replace="~{fragments/ui/ribbon :: ribbon(~{::#tabs})}">
+    <div id="tabs" class="text-sm font-medium text-center text-gray-500 dark:text-white">
+        <th:block th:switch="${tab}">
+            <th:block th:case="'edit'">
+                <ul class="flex flex-wrap -mb-px">
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-bold('feedItems/feed', 'Feed')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-active('feedItems/edit', 'Edit')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/filter', 'Filter')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/view', 'View')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/options', 'Options')}"></li>
+                </ul>
+                <th:block th:replace="~{fragments/ui/ribbon :: edit-controls('feeds', ${selection})}"></th:block>
+            </th:block>
+            <th:block th:case="'filter'">
+                <ul class="flex flex-wrap -mb-px">
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-bold('feedItems/feed', 'Feed')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/edit', 'Edit')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-active('feedItems/filter', 'Filter')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/view', 'View')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/options', 'Options')}"></li>
+                </ul>
+                <th:block th:replace="~{fragments/ui/ribbon :: filter-controls('feeds')}"></th:block>
+            </th:block>
+            <th:block th:case="'view'">
+                <ul class="flex flex-wrap -mb-px">
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-bold('feedItems/feed', 'Feed')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/edit', 'Edit')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/filter', 'Filter')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-active('feedItems/view', 'View')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/options', 'Options')}"></li>
+                </ul>
+                <th:block th:replace="~{fragments/ui/ribbon :: view-controls('feeds')}"></th:block>
+            </th:block>
+            <th:block th:case="'options'">
+                <ul class="flex flex-wrap -mb-px">
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-bold('feedItems/feed', 'Feed')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/edit', 'Edit')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/filter', 'Filter')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/view', 'View')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-active('feedItems/options', 'Options')}"></li>
+                </ul>
+                <th:block th:replace="~{fragments/ui/ribbon :: options-controls('feeds')}"></th:block>
+            </th:block>
+            <th:block th:case="*">
+                <ul class="flex flex-wrap -mb-px">
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab-active('feedItems/feed', 'Feed')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/edit', 'Edit')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/filter', 'Filter')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/view', 'View')}"></li>
+                    <li th:replace="~{fragments/ui/tabs :: ribbon-tab('feedItems/options', 'Options')}"></li>
+                </ul>
+                <th:block th:replace="~{fragments/ui/ribbon :: feed-controls(${selection})}"></th:block>
+            </th:block>
+        </th:block>
+    </div>
+</div>
+
+<ul th:fragment="navitem" class="space-y-2 font-medium">
+    <li>
+        <a
+                href="#" hx-get="/feedItems/" hx-trigger="click"
+                hx-target="#content-root" hx-push-url="/view/feeds"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+        >
+            <th:block th:replace="~{fragments/ui/icon::feed}"></th:block>
+            <span class="flex-1 ml-2">Feeds</span>
+            <span th:text="${feedItemCount}"
+                  class="inline-flex items-center justify-center h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-red-100 rounded-full dark:bg-red-900 dark:text-blue-300">0</span>
+        </a>
+    </li>
+</ul>
+
+</body>
+</html>
