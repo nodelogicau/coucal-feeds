@@ -17,10 +17,7 @@
 package au.nodelogic.coucal.feeds.workflow;
 
 import au.nodelogic.coucal.feeds.channel.FeedService;
-import au.nodelogic.coucal.feeds.data.Feed;
-import au.nodelogic.coucal.feeds.data.FeedItem;
-import au.nodelogic.coucal.feeds.data.FeedItemRepository;
-import au.nodelogic.coucal.feeds.data.FeedRepository;
+import au.nodelogic.coucal.feeds.data.*;
 import com.rometools.rome.io.FeedException;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
@@ -43,14 +40,18 @@ public class FeedUpdater {
 
     private final FeedRepository feedRepository;
 
+    private final FeedCategoryRepository feedCategoryRepository;
+
     private final FeedItemRepository feedItemRepository;
 
     private boolean shuttingDown = false;
 
     public FeedUpdater(@Autowired FeedService feedService, @Autowired FeedRepository feedRepository,
+                       @Autowired FeedCategoryRepository feedCategoryRepository,
                        @Autowired FeedItemRepository feedItemRepository) {
         this.feedService = feedService;
         this.feedRepository = feedRepository;
+        this.feedCategoryRepository = feedCategoryRepository;
         this.feedItemRepository = feedItemRepository;
     }
 
@@ -58,18 +59,20 @@ public class FeedUpdater {
     public void refreshFeeds() {
         try {
             List<Feed> feeds = feedRepository.findAll();
+            List<FeedCategory> categories = new ArrayList<>();
             List<FeedItem> feedItems = new ArrayList<>();
             feeds.parallelStream().forEach(feed -> {
                 if (shuttingDown) {
                     return;
                 }
                 try {
-                    feedService.refreshFeed(feed.getSource(), new FeedConsumer(feed, feedItems));
+                    feedService.refreshFeed(feed.getSource(), new FeedConsumer(feed, feedItems, categories));
                 } catch (FeedException | IOException e) {
                     LOGGER.error("Failed to refresh feed: {}", feed.getSource(), e);
                 }
             });
             feedRepository.saveAll(feeds);
+            feedCategoryRepository.saveAll(categories);
             feedItemRepository.saveAll(feedItems);
         } catch (Exception ex) {
             LOGGER.error("Failed to refresh feeds", ex);

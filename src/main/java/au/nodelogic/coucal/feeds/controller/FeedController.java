@@ -17,10 +17,7 @@
 package au.nodelogic.coucal.feeds.controller;
 
 import au.nodelogic.coucal.feeds.channel.FeedService;
-import au.nodelogic.coucal.feeds.data.Feed;
-import au.nodelogic.coucal.feeds.data.FeedItem;
-import au.nodelogic.coucal.feeds.data.FeedItemRepository;
-import au.nodelogic.coucal.feeds.data.FeedRepository;
+import au.nodelogic.coucal.feeds.data.*;
 import au.nodelogic.coucal.feeds.workflow.FeedConsumer;
 import com.rometools.rome.io.FeedException;
 import org.slf4j.Logger;
@@ -72,6 +69,7 @@ public class FeedController {
     public String addFeed(@ModelAttribute("feedUrl") String url, Model model) throws IOException {
         List<String> feedUrls = feedService.resolveFeeds(url);
         List<Feed> feeds = new ArrayList<>();
+        List<FeedCategory> categories = new ArrayList<>();
         List<FeedItem> feedItems = new ArrayList<>();
         feedUrls.forEach(feedUrl -> {
             try {
@@ -80,7 +78,7 @@ public class FeedController {
                 feed.setUri(feedUrl);
                 feed.setSource(source);
                 feeds.add(feed);
-                feedService.refreshFeed(source, new FeedConsumer(feed, feedItems));
+                feedService.refreshFeed(source, new FeedConsumer(feed, feedItems, categories));
             } catch (FeedException | IOException e) {
                 throw new RuntimeException(e);
             }

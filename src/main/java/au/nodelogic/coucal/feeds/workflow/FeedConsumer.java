@@ -1,6 +1,7 @@
 package au.nodelogic.coucal.feeds.workflow;
 
 import au.nodelogic.coucal.feeds.data.Feed;
+import au.nodelogic.coucal.feeds.data.FeedCategory;
 import au.nodelogic.coucal.feeds.data.FeedItem;
 import com.rometools.rome.feed.synd.SyndFeed;
 import org.owasp.html.PolicyFactory;
@@ -22,11 +23,14 @@ public class FeedConsumer implements Consumer<SyndFeed> {
 
     private final List<FeedItem> feedItems;
 
+    private final List<FeedCategory> feedCategories;
+
     private final PolicyFactory htmlSanitizerPolicy;
 
-    public FeedConsumer(Feed feed, List<FeedItem> feedItems) {
+    public FeedConsumer(Feed feed, List<FeedItem> feedItems, List<FeedCategory> categories) {
         this.feed = feed;
         this.feedItems = feedItems;
+        this.feedCategories = categories;
         this.htmlSanitizerPolicy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
     }
 
@@ -62,6 +66,14 @@ public class FeedConsumer implements Consumer<SyndFeed> {
                 }
                 item.setPublishedDate(entry.getPublishedDate());
                 item.setFeed(feed);
+                item.setCategories(entry.getCategories().stream().filter(c -> c.getTaxonomyUri() != null)
+                        .map(syndCategory -> {
+                    FeedCategory category = new FeedCategory();
+                    category.setName(syndCategory.getName());
+                    category.setUri(syndCategory.getTaxonomyUri());
+                    return category;
+                }).toList());
+                feedCategories.addAll(item.getCategories());
                 feedItems.add(item);
             } catch (Exception e) {
                 LOGGER.warn("Invalid feed entry {}", entry.getUri());

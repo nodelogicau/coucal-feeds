@@ -16,13 +16,12 @@
 
 package au.nodelogic.coucal.feeds.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class FeedItem {
@@ -45,12 +44,23 @@ public class FeedItem {
     @JoinColumn(name = "feed_uri")
     private Feed feed;
 
+    @ManyToMany
+    private List<FeedCategory> categories = new ArrayList<>();
+
     public Feed getFeed() {
         return feed;
     }
 
     public void setFeed(Feed feed) {
         this.feed = feed;
+    }
+
+    public List<FeedCategory> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<FeedCategory> categories) {
+        this.categories = categories;
     }
 
     public String getUri() {
@@ -108,6 +118,11 @@ public class FeedItem {
 
     public FeedItem withFeed(Feed feed) {
         setFeed(feed);
+        return this;
+    }
+
+    public FeedItem withCategories(List<FeedCategory> categories) {
+        setCategories(categories);
         return this;
     }
 }
