@@ -43,9 +43,9 @@ public class FeedService {
     public List<String> resolveFeeds(String url) throws IOException {
         List<String> feedUrls = new ArrayList<>();
         URL source = URI.create(url).toURL();
-        if (source.getHost().endsWith("reddit.com")) {
+        if (source.getHost().endsWith("reddit.com") && !url.endsWith(".rss")) {
             feedUrls.add(url.replaceAll("/$", "") + ".rss");
-        } else if (source.getHost().endsWith("theguardian.com")) {
+        } else if (source.getHost().endsWith("theguardian.com") && !url.endsWith("/rss")) {
             feedUrls.add(url.replaceAll("/$", "") + "/rss");
         } else {
             try {

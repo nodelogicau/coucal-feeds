@@ -16,10 +16,10 @@
 
 package au.nodelogic.coucal.feeds.controller;
 
-import au.nodelogic.coucal.feeds.channel.FeedService;
-import au.nodelogic.coucal.feeds.data.*;
-import au.nodelogic.coucal.feeds.workflow.FeedConsumer;
-import com.rometools.rome.io.FeedException;
+import au.nodelogic.coucal.feeds.data.FeedItem;
+import au.nodelogic.coucal.feeds.data.FeedItemRepository;
+import au.nodelogic.coucal.feeds.data.FeedRepository;
+import au.nodelogic.coucal.feeds.workflow.FeedUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,15 +38,15 @@ public class FeedController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FeedController.class);
 
-    private final FeedService feedService;
+    private final FeedUpdater feedUpdater;
 
     private final FeedRepository feedRepository;
 
     private final FeedItemRepository feedItemRepository;
 
-    public FeedController(@Autowired FeedService feedService, @Autowired FeedRepository feedRepository,
-                          FeedItemRepository feedItemRepository) {
-        this.feedService = feedService;
+    public FeedController(@Autowired FeedUpdater feedUpdater,
+                          @Autowired FeedRepository feedRepository, FeedItemRepository feedItemRepository) {
+        this.feedUpdater = feedUpdater;
         this.feedRepository = feedRepository;
         this.feedItemRepository = feedItemRepository;
     }
@@ -67,24 +64,7 @@ public class FeedController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public String addFeed(@ModelAttribute("feedUrl") String url, Model model) throws IOException {
-        List<String> feedUrls = feedService.resolveFeeds(url);
-        List<Feed> feeds = new ArrayList<>();
-        List<FeedCategory> categories = new ArrayList<>();
-        List<FeedItem> feedItems = new ArrayList<>();
-        feedUrls.forEach(feedUrl -> {
-            try {
-                URL source = URI.create(feedUrl).toURL();
-                Feed feed = new Feed();
-                feed.setUri(feedUrl);
-                feed.setSource(source);
-                feeds.add(feed);
-                feedService.refreshFeed(source, new FeedConsumer(feed, feedItems, categories));
-            } catch (FeedException | IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        feedRepository.saveAll(feeds);
-        feedItemRepository.saveAll(feedItems);
+        feedUpdater.discoverFeeds(url);
         return listFeeds(model);
     }
 }

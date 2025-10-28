@@ -27,6 +27,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +79,28 @@ public class FeedUpdater {
         } catch (Exception ex) {
             LOGGER.error("Failed to refresh feeds", ex);
         }
+    }
+
+    public void discoverFeeds(String url) throws IOException {
+        List<String> feedUrls = feedService.resolveFeeds(url);
+        List<Feed> feeds = new ArrayList<>();
+        List<FeedCategory> categories = new ArrayList<>();
+        List<FeedItem> feedItems = new ArrayList<>();
+        feedUrls.forEach(feedUrl -> {
+            try {
+                URL source = URI.create(feedUrl).toURL();
+                Feed feed = new Feed();
+                feed.setUri(feedUrl);
+                feed.setSource(source);
+                feeds.add(feed);
+                feedService.refreshFeed(source, new FeedConsumer(feed, feedItems, categories));
+            } catch (FeedException | IOException e) {
+                LOGGER.error("Failed to refresh feed: {}", feedUrl, e);
+            }
+        });
+        feedRepository.saveAll(feeds);
+        feedCategoryRepository.saveAll(categories);
+        feedItemRepository.saveAll(feedItems);
     }
 
     @PreDestroy

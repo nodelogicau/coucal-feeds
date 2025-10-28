@@ -2,6 +2,7 @@ package au.nodelogic.coucal.feeds.controller.rest;
 
 import au.nodelogic.coucal.feeds.data.Feed;
 import au.nodelogic.coucal.feeds.data.FeedRepository;
+import au.nodelogic.coucal.feeds.workflow.FeedUpdater;
 import com.rometools.opml.feed.opml.Opml;
 import com.rometools.opml.feed.opml.Outline;
 import com.rometools.opml.io.impl.OPML20Generator;
@@ -9,6 +10,7 @@ import com.rometools.opml.io.impl.OPML20Parser;
 import com.rometools.rome.io.FeedException;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -57,9 +58,13 @@ import java.util.Locale;
 @RequestMapping(value = "/api/feeds", produces =  MediaType.APPLICATION_XML_VALUE)
 public class FeedRestController {
 
+    private final FeedUpdater feedUpdater;
+
     private final FeedRepository feedRepository;
 
-    public FeedRestController(@Autowired FeedRepository feedRepository) {
+    public FeedRestController(@Autowired FeedUpdater feedUpdater,
+                              @Autowired FeedRepository feedRepository) {
+        this.feedUpdater = feedUpdater;
         this.feedRepository = feedRepository;
     }
 
@@ -70,14 +75,16 @@ public class FeedRestController {
         // Populate exportOpml with feed data from feedRepository
         exportOpml.setOutlines(feedRepository.findAll().stream().map(feed ->
                 new Outline(feed.getTitle(), feed.getSource(), feed.getLink())).toList());
-        String opmlString = new XMLOutputter().outputString(new OPML20Generator().generate(exportOpml));
+        XMLOutputter xmlOutput = new XMLOutputter();
+        xmlOutput.setFormat(Format.getPrettyFormat());
+        String opmlString = xmlOutput.outputString(new OPML20Generator().generate(exportOpml));
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_XML)
                 .header("Content-Disposition", "attachment; filename=feeds.xml")
                 .body(opmlString);
     }
 
     @PostMapping("/import")
-    public void importFeeds(@RequestAttribute MultipartFile opmlFile) throws FeedException, IOException, JDOMException {
+    public void importFeeds(@RequestParam("opmlFile") MultipartFile opmlFile) throws FeedException, IOException, JDOMException {
         // Implementation for importing feeds goes here
         OPML20Parser parser = new OPML20Parser();
 
@@ -87,12 +94,16 @@ public class FeedRestController {
         List<Feed> feeds = new ArrayList<>();
         for (Outline outline : importedOpml.getOutlines()) {
             // Create and save Feed entities based on the outlines
-            au.nodelogic.coucal.feeds.data.Feed feed = new au.nodelogic.coucal.feeds.data.Feed();
-            feed.setTitle(outline.getText());
-            feed.setSource(URI.create(outline.getXmlUrl()).toURL());
-            feed.setLink(URI.create(outline.getHtmlUrl()).toURL());
-            feeds.add(feed);
+            processOutline(outline);
         }
-        feedRepository.saveAll(feeds);
+    }
+
+    private void processOutline(Outline outline) throws IOException {
+        if (outline.getXmlUrl() != null) {
+            feedUpdater.discoverFeeds(outline.getXmlUrl());
+        }
+        for (Outline child : outline.getChildren()) {
+            processOutline(child);
+        }
     }
 }

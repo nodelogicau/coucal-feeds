@@ -21,6 +21,12 @@
                                 class="px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Feeds
                         </button>
+                        <button hx-get="/categories/"
+                                hx-trigger="click"
+                                hx-target="#main-content"
+                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Categories
+                        </button>
                         <button hx-get="/feedItems/today"
                                 hx-trigger="click"
                                 hx-target="#main-content"
@@ -70,5 +76,16 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
+    <script th:src="@{/webjars/flowbite/dist/flowbite.min.js}"
+            src="https://cdn.jsdelivr.net/npm/flowbite@3.0.0/dist/flowbite.js/flowbite.min.js"></script>
+    <script>
+        htmx.on("htmx:beforeRequest", (event) => {
+            const elt = event.detail.elt
+            if (event.detail.boosted === true && elt.tagName === "A" && !elt.hasAttribute("hx-swap")) {
+                elt.setAttribute("hx-swap", "transition:true")
+            }
+        })
+    </script>
 </body>
 </html>

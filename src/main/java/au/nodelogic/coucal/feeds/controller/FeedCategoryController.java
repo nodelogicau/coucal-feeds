@@ -4,6 +4,7 @@ import au.nodelogic.coucal.feeds.data.FeedCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -16,7 +17,9 @@ public class FeedCategoryController {
         this.feedCategoryRepository = feedCategoryRepository;
     }
 
+    @GetMapping("/")
     public String listCategories(Model model) {
-        return "categories/index";
+        model.addAttribute("categories", feedCategoryRepository.findAll());
+        return "categories/list";
     }
 }
