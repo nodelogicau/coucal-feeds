@@ -22,7 +22,7 @@ dependencies {
     implementation libs.spring.boot.web, libs.spring.boot.json,
             libs.slugify, libs.prettytime,
             libs.sqlite, libs.hibernate.community.dialects, libs.spring.boot.data.jpa,
-            libs.rome, libs.jsoup,
+            libs.rome, libs.rome.opml, libs.jsoup,
             libs.html.sanitizer, libs.swing.flatlaf
 
     implementation(libs.springdoc.boot.starter) {

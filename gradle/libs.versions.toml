@@ -3,6 +3,7 @@ spring-boot = "3.4.1"
 spock = "2.4-M4-groovy-4.0"
 h2 = "2.3.232"
 springdoc = "2.8.9"
+rome = "2.1.0"
 
 [libraries]
 spring-boot-thymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf", version.ref = "spring-boot"}
@@ -35,9 +36,11 @@ ical4j-integration-mail = { group = "org.ical4j", name = "ical4j-integration-mai
 slugify = { group = "com.github.slugify", name = "slugify", version = "3.0.7"}
 prettytime = {group = 'org.ocpsoft.prettytime', name='prettytime', version='5.0.9.Final'}
 
+rome = {group = 'com.rometools', name='rome', version.ref='rome'}
+rome-opml = {group = 'com.rometools', name='rome-opml', version.ref='rome'}
+
 #jakarta-mail = {group = 'jakarta.mail', name = 'jakarta.mail-api', version = '2.1.3'}
 angus-mail = {group = 'org.eclipse.angus', name = 'angus-mail', version='2.0.3'}
-rome = {group = 'com.rometools', name='rome', version='2.1.0'}
 jsoup = {group = 'org.jsoup', name = 'jsoup', version = '1.18.3'}
 
 smack = {group = 'org.igniterealtime.smack', name = 'smack-java11', version = '4.5.0-beta5'}
