@@ -74,8 +74,8 @@ public class FeedUpdater {
                 }
             });
             feedRepository.saveAll(feeds);
-            feedCategoryRepository.saveAll(categories);
             feedItemRepository.saveAll(feedItems);
+            feedCategoryRepository.saveAll(categories);
         } catch (Exception ex) {
             LOGGER.error("Failed to refresh feeds", ex);
         }
@@ -99,8 +99,8 @@ public class FeedUpdater {
             }
         });
         feedRepository.saveAll(feeds);
-        feedCategoryRepository.saveAll(categories);
         feedItemRepository.saveAll(feedItems);
+        feedCategoryRepository.saveAll(categories);
     }
 
     @PreDestroy

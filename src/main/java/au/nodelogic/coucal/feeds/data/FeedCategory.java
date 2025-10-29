@@ -15,7 +15,7 @@ public class FeedCategory {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categories")
     private List<FeedItem> feedItems = new ArrayList<>();
 
     public String getUri() {

@@ -45,6 +45,10 @@ public class FeedItem {
     private Feed feed;
 
     @ManyToMany
+    @JoinTable(
+            name = "feed_item_categories",
+            joinColumns = @JoinColumn(name = "feed_item_uri"),
+            inverseJoinColumns = @JoinColumn(name = "category_uri"))
     private List<FeedCategory> categories = new ArrayList<>();
 
     public Feed getFeed() {

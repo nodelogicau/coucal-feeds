@@ -71,11 +71,10 @@ public class FeedConsumer implements Consumer<SyndFeed> {
                     FeedCategory category = new FeedCategory();
                     category.setName(syndCategory.getName());
                     category.setUri(syndCategory.getTaxonomyUri());
-                    category.getFeedItems().add(item);
                     return category;
                 }).toList());
-                feedCategories.addAll(item.getCategories());
                 feedItems.add(item);
+                feedCategories.addAll(item.getCategories());
             } catch (Exception e) {
                 LOGGER.warn("Invalid feed entry {}", entry.getUri());
             }
