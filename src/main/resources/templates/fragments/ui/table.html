@@ -91,6 +91,11 @@
                     <td class="px-2 py-1">
                         <a th:href="${feedItem.link}" target="_blank" th:text="${feedItem.title}" th:id="|feed-item${iStat.index}|"
                            th:data-popover-target="|popover-feed-item${iStat.index}|" data-popover-placement="right"></a>
+
+                        <th:block th:each="category : ${feedItem.categories}">
+                            <span th:replace="~{fragments/ui/badge::badge(${category?.name}, 'blue')}">
+                            </span>
+                        </th:block>
                     </td>
                     <td class="px-2 py-1">
                         <span th:text="${dateFormatter.format(feedItem.publishedDate)}" class="px-2 py-1 text-nowrap">
