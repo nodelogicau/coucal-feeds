@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Category Badges List -->
+<div th:fragment="category-badges(categories, clickable)" class="flex flex-wrap gap-2">
+    <span th:each="category : ${categories}"
+          th:class="${clickable ? 'cursor-pointer' : ''}"
+          th:hx-get="${clickable ? '/categories/' + category.uri: null}"
+          th:hx-target="${clickable ? '#main-content' : null}"
+          class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors duration-150">
+        <span th:text="${category.name}"></span>
+        <span th:if="${category.feedItems != null}"
+              class="ml-1 text-indigo-600 dark:text-indigo-400"
+              th:text="'(' + ${#lists.size(category.feedItems)} + ')'">
+        </span>
+    </span>
+
+    <!-- Empty State -->
+    <span th:if="${#lists.isEmpty(categories)}"
+          class="text-gray-500 dark:text-gray-400 text-sm">
+        No categories
+    </span>
+</div>
+
+<!-- Single Category Badge -->
+<span th:fragment="category-badge(category, clickable)"
+      th:class="${clickable ? 'cursor-pointer' : ''}"
+      th:hx-get="${clickable ? '/categories/' + category.uri : null}"
+      th:hx-target="${clickable ? '#main-content' : null}"
+      class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors duration-150">
+    <span th:text="${category.name}"></span>
+    <span th:if="${category.feedItems != null}"
+          class="ml-1 text-indigo-600 dark:text-indigo-400"
+          th:text="'(' + ${#lists.size(category.feedItems)} + ')'">
+    </span>
+</span>
+
+</html>

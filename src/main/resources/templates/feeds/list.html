@@ -17,11 +17,11 @@
 <div class="p-4 space-y-4">
     <!-- Add Feed Toolbar -->
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-        <div class="p-4">
+        <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <form hx-post="/feeds/"
                   hx-target="#main-content"
-                  class="flex gap-2 items-center">
-                <div class="flex-grow">
+                  class="grow flex gap-2 items-center">
+                <div class="grow">
                     <label for="feed-url" class="sr-only">Feed URL</label>
                     <div class="relative">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -33,7 +33,7 @@
                                name="feedUrl"
                                id="feed-url"
                                required
-                               placeholder="Enter feed URL..."
+                               placeholder="Enter feed or website URL..."
                                class="block w-full rounded-md border-0 py-2 pl-10 pr-4 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6">
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                 </button>
             </form>
 
-            <div class="mt-4 flex justify-end space-x-2">
+            <div class="flex justify-end space-x-2">
                 <!-- Import OPML -->
                 <form hx-post="/api/feeds/import"
                       hx-target="#main-content"
@@ -55,7 +55,7 @@
                         <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
-                        Import OPML
+                        Import
                         <input type="file"
                                name="opmlFile"
                                accept=".opml,.xml"
@@ -71,7 +71,7 @@
                     <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 13.293a1 1 0 010 1.414l-3-3a1 1 0 011.414-1.414L6 11.586V4a1 1 0 012 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                     </svg>
-                    Export OPML
+                    Export
                 </a>
             </div>
         </div>
@@ -105,6 +105,9 @@
                                        th:text="${#lists.size(feed.items)} + ' entries'">
                                     </p>
                                 </div>
+                            </div>
+                            <div class="mt-2" th:if="${not #lists.isEmpty(feed.categories)}">
+                                <div th:replace="~{fragments/categories :: category-badges(${feed.categories}, true)}"></div>
                             </div>
                             <div class="mt-2 flex justify-between">
                                 <div class="sm:flex">
