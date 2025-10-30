@@ -13,7 +13,10 @@
         <header class="bg-white dark:bg-gray-800 shadow-md">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex items-center justify-between">
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Coucal Feeds</h1>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                        Coucal Feeds
+                         <span class="text-indigo-500">Beta</span>
+                    </h1>
                     <nav class="space-x-4">
                         <button hx-get="/feeds/"
                                 hx-trigger="click"
@@ -21,17 +24,24 @@
                                 class="px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Feeds
                         </button>
-                        <button hx-get="/categories/"
+<!--                        <button hx-get="/categories/"-->
+<!--                                hx-trigger="click"-->
+<!--                                hx-target="#main-content"-->
+<!--                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">-->
+<!--                            Categories-->
+<!--                        </button>-->
+                        <button hx-get="/feedItems/recent"
                                 hx-trigger="click"
                                 hx-target="#main-content"
                                 class="px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Categories
+                            Recent Items
                         </button>
-                        <button hx-get="/feedItems/today"
+                        <button hx-get="/chat"
                                 hx-trigger="click"
-                                hx-target="#main-content"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Latest Items
+                                hx-target="#modal-content"
+                                _="on click remove .hidden from #modal"
+                                class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150 ease-in-out">
+                            AI Chat
                         </button>
                     </nav>
                 </div>
@@ -76,6 +86,35 @@
             </div>
         </div>
     </div>
+
+    <button type="button" class="fixed left-1/2 transform -translate-x-1/2 bottom-1 z-99 hidden opacity-30 hover:opacity-100 transition-opacity duration-300 text-white bg-indigo-600 hover:bg-indigo-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onclick="topFunction()" id="myBtn" title="Go to top">
+        <th:block th:replace="~{fragments/ui/icon :: up}"></th:block>
+        <span class="sr-only">Go to top</span>
+    </button>
+    <script>
+        // Get the button:
+        let mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+          if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+          } else {
+            mybutton.style.display = "none";
+          }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+          document.body.scrollTop = 0; // For Safari
+          /*document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera*/
+          window.scroll({top: 0, behavior: "smooth"})
+        }
+    </script>
+
     <script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
     <script th:src="@{/webjars/flowbite/dist/flowbite.min.js}"
             src="https://cdn.jsdelivr.net/npm/flowbite@3.0.0/dist/flowbite.js/flowbite.min.js"></script>

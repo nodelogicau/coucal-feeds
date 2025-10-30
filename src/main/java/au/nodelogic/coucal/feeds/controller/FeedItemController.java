@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -53,6 +54,18 @@ public class FeedItemController {
         model.addAttribute("dateFormatter", new PrettyTime());
 //        model.addAttribute("feedItems", feedItems);
         return "feedItems/index";
+    }
+
+    @GetMapping("/recent")
+    public String listRecentItems(Model model) {
+        Instant now = Instant.now();
+        Instant twelveHoursAgo = now.minusSeconds(12 * 60 * 60);
+
+        List<FeedItem> feedItems = feedItemRepository.findByPublishedDateBetweenOrderByPublishedDateDesc(
+                Date.from(twelveHoursAgo), Date.from(now));
+        model.addAttribute("dateFormatter", new PrettyTime());
+        model.addAttribute("feedItems", feedItems);
+        return "feedItems/list";
     }
 
     @GetMapping("/{filter}")
