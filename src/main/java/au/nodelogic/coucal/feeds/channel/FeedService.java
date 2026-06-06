@@ -16,13 +16,13 @@
 
 package au.nodelogic.coucal.feeds.channel;
 
-import au.nodelogic.coucal.feeds.util.HtmlParser;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.feed.synd.SyndImage;
 import com.rometools.rome.feed.synd.SyndImageImpl;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import org.coucal.starter.web.util.HtmlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Single Chat Message -->
+<div th:fragment="chat-message(message, response)" class="space-y-4">
+    <!-- User Message -->
+    <div class="flex items-start space-x-3 justify-end">
+        <div class="flex-1 max-w-2xl ml-auto">
+            <div class="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-3 shadow-sm">
+                <p class="text-sm text-gray-900 dark:text-white" th:text="${message}"></p>
+            </div>
+        </div>
+        <div class="flex-shrink-0">
+            <div class="w-8 h-8 rounded-full bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
+                    <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Response -->
+    <div class="flex items-start space-x-3">
+        <div class="flex-shrink-0">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-300" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 12H15M12 9V15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+        <div class="flex-1 max-w-2xl">
+            <div class="bg-white dark:bg-gray-700 rounded-lg p-3 shadow-sm">
+                <p class="text-sm text-gray-900 dark:text-white" th:text="${response}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

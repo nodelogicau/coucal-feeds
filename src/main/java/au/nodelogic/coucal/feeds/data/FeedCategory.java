@@ -1,8 +1,6 @@
 package au.nodelogic.coucal.feeds.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +12,10 @@ public class FeedCategory {
     private String uri;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "feed_uri")
+    private Feed feed;
 
     @ManyToMany(mappedBy = "categories")
     private List<FeedItem> feedItems = new ArrayList<>();
@@ -32,6 +34,14 @@ public class FeedCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Feed getFeed() {
+        return feed;
+    }
+
+    public void setFeed(Feed feed) {
+        this.feed = feed;
     }
 
     public List<FeedItem> getFeedItems() {

@@ -87,33 +87,7 @@
         </div>
     </div>
 
-    <button type="button" class="fixed left-1/2 transform -translate-x-1/2 bottom-1 z-99 hidden opacity-30 hover:opacity-100 transition-opacity duration-300 text-white bg-indigo-600 hover:bg-indigo-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onclick="topFunction()" id="myBtn" title="Go to top">
-        <th:block th:replace="~{fragments/ui/icon :: up}"></th:block>
-        <span class="sr-only">Go to top</span>
-    </button>
-    <script>
-        // Get the button:
-        let mybutton = document.getElementById("myBtn");
-
-        // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function() {scrollFunction()};
-
-        function scrollFunction() {
-          if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            mybutton.style.display = "block";
-          } else {
-            mybutton.style.display = "none";
-          }
-        }
-
-        // When the user clicks on the button, scroll to the top of the document
-        function topFunction() {
-          document.body.scrollTop = 0; // For Safari
-          /*document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera*/
-          window.scroll({top: 0, behavior: "smooth"})
-        }
-    </script>
+    <th:block th:replace="~{fragments/ui/button :: scroll-to-top}"></th:block>
 
     <script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
     <script th:src="@{/webjars/flowbite/dist/flowbite.min.js}"

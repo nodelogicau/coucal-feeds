@@ -19,9 +19,10 @@ repositories {
 }
 
 dependencies {
-    implementation libs.coucal.starter.api, libs.coucal.starter.jpa, libs.coucal.starter.web,
-            libs.coucal.starter.main,
-            libs.slugify, libs.prettytime, libs.rome, libs.rome.opml
+    implementation libs.coucal.starter.api, libs.coucal.starter.jpa,
+            libs.coucal.starter.web, libs.coucal.starter.main
+
+    implementation libs.slugify, libs.prettytime, libs.rome, libs.rome.opml
 
     testImplementation platform(libs.spock.bom), libs.spock.core,
             libs.spock.spring, libs.spring.boot.test, libs.h2

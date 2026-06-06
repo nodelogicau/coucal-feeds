@@ -41,8 +41,10 @@ public class Feed {
 
     private Date publishedDate;
 
-    @OneToMany
-    @JoinColumn(name = "feed_uri")
+    @OneToMany(mappedBy = "feed")
+    private List<FeedCategory> categories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feed")
     private List<FeedItem> items = new ArrayList<>();
 
     @OneToOne
@@ -102,6 +104,10 @@ public class Feed {
 
     public void setPublishedDate(Date publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    public List<FeedCategory> getCategories() {
+        return categories;
     }
 
     public List<FeedItem> getItems() {

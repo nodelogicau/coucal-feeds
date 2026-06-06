@@ -44,7 +44,7 @@ public class FeedItem {
     @JoinColumn(name = "feed_uri")
     private Feed feed;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "feed_item_categories",
             joinColumns = @JoinColumn(name = "feed_item_uri"),

@@ -99,8 +99,8 @@ public class FeedUpdater {
             }
         });
         feedRepository.saveAll(feeds);
-        feedItemRepository.saveAll(feedItems);
         feedCategoryRepository.saveAll(categories);
+        feedItemRepository.saveAll(feedItems);
     }
 
     @PreDestroy

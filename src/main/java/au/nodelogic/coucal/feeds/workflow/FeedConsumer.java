@@ -4,8 +4,7 @@ import au.nodelogic.coucal.feeds.data.Feed;
 import au.nodelogic.coucal.feeds.data.FeedCategory;
 import au.nodelogic.coucal.feeds.data.FeedItem;
 import com.rometools.rome.feed.synd.SyndFeed;
-import org.owasp.html.PolicyFactory;
-import org.owasp.html.Sanitizers;
+import org.coucal.starter.web.util.HtmlSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,13 +24,10 @@ public class FeedConsumer implements Consumer<SyndFeed> {
 
     private final List<FeedCategory> feedCategories;
 
-    private final PolicyFactory htmlSanitizerPolicy;
-
     public FeedConsumer(Feed feed, List<FeedItem> feedItems, List<FeedCategory> categories) {
         this.feed = feed;
         this.feedItems = feedItems;
         this.feedCategories = categories;
-        this.htmlSanitizerPolicy = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
     }
 
     @Override
@@ -62,7 +58,7 @@ public class FeedConsumer implements Consumer<SyndFeed> {
                 item.setTitle(entry.getTitle());
                 item.setLink(entry.getLink());
                 if (entry.getDescription() != null) {
-                    item.setDescription(htmlSanitizerPolicy.sanitize(entry.getDescription().getValue()));
+                    item.setDescription(HtmlSanitizer.sanitize(entry.getDescription().getValue()));
                 }
                 item.setPublishedDate(entry.getPublishedDate());
                 item.setFeed(feed);
@@ -71,6 +67,7 @@ public class FeedConsumer implements Consumer<SyndFeed> {
                     FeedCategory category = new FeedCategory();
                     category.setName(syndCategory.getName());
                     category.setUri(syndCategory.getTaxonomyUri());
+                    category.setFeed(feed);
                     return category;
                 }).toList());
                 feedItems.add(item);
